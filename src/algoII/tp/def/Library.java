@@ -10,5 +10,6 @@ public interface Library
 	public List<Label> getLabels(Filter f);
 	public Label getLabel(Filter f, String labelname);
 	public List<Title> getTitles(Filter f, Label lb);
+	public void listFiles(String string);
 	
 }

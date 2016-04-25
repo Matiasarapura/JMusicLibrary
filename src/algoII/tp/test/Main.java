@@ -12,13 +12,14 @@ public class Main
 	public static void main(String[] args)
 	{
 		Library lib = new LibraryImpleTrucha();
-		List<Filter> filtros = lib.getFilters();
-		
-		for(Filter f:filtros)
-		{
-			List<Label> labels = f.getLabels();
-			
-		}
+		lib.listFiles("C:\\ALBUMS_deploy\\ALBUMS");
+//		List<Filter> filtros = lib.getFilters();
+//		
+//		for(Filter f:filtros)
+//		{
+//			List<Label> labels = f.getLabels();
+//			
+//		}
 		
 	}
 }

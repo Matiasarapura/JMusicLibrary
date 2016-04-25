@@ -1,5 +1,6 @@
 package algoII.tp.imple;
 
+import java.io.File;
 import java.util.List;
 
 import algoII.tp.def.Filter;
@@ -50,6 +51,26 @@ public class LibraryImpleTrucha implements Library
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@SuppressWarnings("unused")
+	public void listFiles(String folder){
+		File directory = new File(folder);
+		
+		File[] contents = directory.listFiles();
+		
+		if(contents==null){
+			if(directory.getAbsolutePath().endsWith("info.jml"))
+				System.out.println(directory.getAbsolutePath());
+		}
+		else{
+		
+			for ( File f : contents) {
+			  
+			  listFiles(f.getAbsolutePath());
+			}
+		
+		}
 	}
 
 }
