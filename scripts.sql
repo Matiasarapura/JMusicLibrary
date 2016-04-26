@@ -1,9 +1,10 @@
+DROP DATABASE Dbmusic;
 
 CREATE DATABASE Dbmusic;
 
 CREATE TABLE `dbmusic`.`title` (
   `idtitle` INT NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(45) NULL,
+  `title` VARCHAR(100) NOT NULL UNIQUE,
   `date` DATE NULL,
   PRIMARY KEY (`idtitle`))
 ENGINE = InnoDB
@@ -11,15 +12,15 @@ AUTO_INCREMENT = 1;
 
 CREATE TABLE `dbmusic`.`filter` (
   `idfilter` INT NOT NULL AUTO_INCREMENT,
-  `filter` VARCHAR(45) NULL,
-  `date` VARCHAR(45) NULL,
+  `filter` VARCHAR(100) NOT NULL UNIQUE,
+  `date` VARCHAR(100) NULL,
   PRIMARY KEY (`idfilter`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1;
 
 CREATE TABLE `dbmusic`.`label` (
 	`idlabel` INT NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(45) NULL,
+    `name` VARCHAR(100) NOT NULL UNIQUE,
     `father` INT NOT NULL DEFAULT 0,
     `date` DATETIME NULL,
     `id_filter` INT NOT NULL,
@@ -41,3 +42,4 @@ CREATE TABLE `dbmusic`.`title_has_label` (
     REFERENCES `dbmusic`.`title` (`idtitle`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
+
