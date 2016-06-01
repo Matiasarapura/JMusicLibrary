@@ -8,7 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -100,30 +102,104 @@ public class LibraryImpleTrucha implements Library
 	    	}
 	    }
 	    
+	    
+	    
+	    absolutePath=devolverPath(absolutePath);
+	    
+	    query=" INSERT IGNORE INTO DBMUSIC.TITLE (TITLE) VALUES  ( \" " + absolutePath + " \") " ;
+	    
+	    statement.execute(query,Statement.RETURN_GENERATED_KEYS);
+	    
+	    ResultSet generatedKeys = statement.getGeneratedKeys();
+	    long titlePK=(long) -1;
+	    
+	    if(generatedKeys.next())
+	    
+	    	titlePK=generatedKeys.getLong(1);
+	 
+	    System.out.println(absolutePath);
+	    
 	    Set<String> keys = filtros_etiquetas.keySet();
 	    
 	    //Obtaining iterator over set entries
 	    Iterator<String> itr = keys.iterator();
-	 
-	    System.out.println(absolutePath);
+	      
 	    //Displaying Key and value pairs
 	    while (itr.hasNext()) { 
-	       // Getting Key
+	       // Procesar Filtro
 	       String filtro = itr.next();
 	       System.out.println(filtro + " : ");
-	       for(String etiqueta:filtros_etiquetas.get(filtro))
+	       
+	       query=" INSERT IGNORE INTO DBMUSIC.FILTER (FILTER) VALUES (\"" + filtro + " \") " ;
+	       
+	       statement.execute(query,Statement.RETURN_GENERATED_KEYS);
+	       
+	       generatedKeys = statement.getGeneratedKeys();
+		   long filterPK = (long) -1;
+		    
+		    if(generatedKeys.next())
+		    
+		    	filterPK=generatedKeys.getLong(1);
+		    
+		    else {//ya existe y hay que hacer un query
+		    	generatedKeys =statement.executeQuery("SELECT IDFILTER FROM DBMUSIC.FILTER WHERE FILTER=\""+filtro+"\"") ;
+		    	String pk;
+				if(generatedKeys.next()){
+				    
+			    	 pk=generatedKeys.getString("IDFILTER");
+			    	 filterPK=Long.parseLong(pk);
+			    	 
+				}
+		    } 
+		    
+		    System.out.println(filterPK);
+		    
+	       
+	       // Procesar Etiquetas
+	       for(String etiqueta:filtros_etiquetas.get(filtro)) {
+	    	
+	    	   etiqueta=devolverEtiqueta(etiqueta);
+	    	   query= " INSERT INTO DBMUSIC.LABEL (NAME,ID_FILTER) VALUES (\""+ etiqueta+ "\",\"" + filterPK +" \") " ;
+	    	   statement.execute(query,Statement.RETURN_GENERATED_KEYS);
+		       
+		       generatedKeys = statement.getGeneratedKeys();
+			   
+		      
+		       
+		       List<Long> labelPKS=new ArrayList<Long>();
+		       
+			   while(generatedKeys.next())
+				   
+				   labelPKS.add(generatedKeys.getLong(1));
+				   	
+			   for(Long labelPK:labelPKS){
+			    	
+			    	query = "INSERT INTO DBMUSIC.TITLE_HAS_LABEL (ID_LABEL,ID_TITLE) VALUES (\""+labelPK+ "\",\"" + titlePK +" \") " ;
+			    	statement.execute(query);
+			    	
+			   }
+	    	   
 	    	   System.out.println(etiqueta);
-	    
-	      
+	    	   
+	    	   
+	       }
 	    }
 	    
-	    query=" INSERT IGNORE INTO DBMUSIC.TITLE (TITLE) VALUES  ( \" " + absolutePath + " \") " ;
 	    
-	    statement.execute(query);
-		
 	    System.out.println("-----------------------------------");
 		
 		
+	}
+	
+	public String devolverPath(String absolutePath){
+		
+		absolutePath= absolutePath.replace("\\", "\\\\\\\\");
+		return absolutePath.substring(0,absolutePath.lastIndexOf("\\\\\\\\"));
+		
+	}
+	
+	public String devolverEtiqueta(String etiqueta){
+		return etiqueta.replace("\"", "\\\" ");
 	}
 	
 	public void cargarDiscos(String folder,Connection con) throws IOException, SQLException{
@@ -131,8 +207,6 @@ public class LibraryImpleTrucha implements Library
 		File directory = new File(folder);
 		
 		File[] contents = directory.listFiles();
-		List<String> texto = null;
-		
 		if(contents==null){
 			if(directory.getAbsolutePath().endsWith("info.jml"))
 					

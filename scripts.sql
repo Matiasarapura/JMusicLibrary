@@ -20,8 +20,8 @@ AUTO_INCREMENT = 1;
 
 CREATE TABLE `dbmusic`.`label` (
 	`idlabel` INT NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(100) NOT NULL UNIQUE,
-    `father` INT NOT NULL DEFAULT 0,
+    `name` VARCHAR(100) NOT NULL,
+    `father` INT NULL,
     `date` DATETIME NULL,
     `id_filter` INT NOT NULL,
     PRIMARY KEY(`idlabel`),
