@@ -13,7 +13,6 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `dbmusic`.`filter` (
   `idfilter` INT NOT NULL AUTO_INCREMENT,
   `filter` VARCHAR(100) NOT NULL UNIQUE,
-  `date` VARCHAR(100) NULL,
   PRIMARY KEY (`idfilter`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1;
@@ -22,7 +21,6 @@ CREATE TABLE `dbmusic`.`label` (
 	`idlabel` INT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(100) NOT NULL,
     `father` INT NULL,
-    `date` DATETIME NULL,
     `id_filter` INT NOT NULL,
     PRIMARY KEY(`idlabel`),
     CONSTRAINT FOREIGN KEY(`father`) REFERENCES label(idlabel),

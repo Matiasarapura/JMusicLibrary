@@ -7,7 +7,7 @@ public class DbConnectionSingleton {
 
 	private static  DbConnectionSingleton dbSingleton;
 	private static Connection connection = null;
-	private static final String dbName = "jdbc:mysql://localhost:3306/mkyongcom";
+	private static final String dbName = "jdbc:mysql://localhost:3306/dbmusic";
 	private static final String dbUser = "root";
 	private static final String dbPassword = "";
 	
@@ -25,6 +25,7 @@ public class DbConnectionSingleton {
 	public Connection getConnection(){
 		if(connection==null){
 			try {
+				Class.forName("com.mysql.jdbc.Driver");
 				connection =  DriverManager.getConnection(dbName, dbUser,dbPassword);
 			} catch (Exception e) {
 				// TODO: handle exception
