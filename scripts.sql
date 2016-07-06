@@ -6,6 +6,7 @@ CREATE TABLE `dbmusic`.`title` (
   `idtitle` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(100) NOT NULL UNIQUE,
   `date` DATE NULL,
+  `fecha` LONG NOT NULL,
   PRIMARY KEY (`idtitle`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1;
@@ -13,7 +14,6 @@ AUTO_INCREMENT = 1;
 CREATE TABLE `dbmusic`.`filter` (
   `idfilter` INT NOT NULL AUTO_INCREMENT,
   `filter` VARCHAR(100) NOT NULL UNIQUE,
-  `date` VARCHAR(100) NULL,
   PRIMARY KEY (`idfilter`))
 ENGINE = InnoDB
 AUTO_INCREMENT = 1;
@@ -22,7 +22,6 @@ CREATE TABLE `dbmusic`.`label` (
 	`idlabel` INT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(100) NOT NULL,
     `father` INT NULL,
-    `date` DATETIME NULL,
     `id_filter` INT NOT NULL,
     PRIMARY KEY(`idlabel`),
     CONSTRAINT FOREIGN KEY(`father`) REFERENCES label(idlabel),
@@ -42,4 +41,3 @@ CREATE TABLE `dbmusic`.`title_has_label` (
     REFERENCES `dbmusic`.`title` (`idtitle`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION);
-
